@@ -68,15 +68,21 @@ var PersonalView = Backbone.View.extend({
         console.log(this.model);
     },
     tagName: 'li',
-    className: 'person',
-    id: 'some-persone',
+    // className: 'person',
+    // id: 'some-persone',
+
+    template: _.template('<strong><%= name %></strong>: <%= job %>, <%= age %> лет'),
 
     /**
      * Наполнение документа HTML кодом
      */
     render: function() {
         // Антипаттерн, так проектировать не нужно
-        this.$el.html(this.model.get('name') + ': ' + this.model.get('job') + ', ' + this.model.get('age') + ' лет');
+        //this.$el.html(this.model.get('name') + ': ' + this.model.get('job') + ', ' + this.model.get('age') + ' лет');
+
+        // Передаем в формате JSON все атт модели в шаблон, после чего вписываем в элемент
+        //this.$el.html(this.template({name:'Николай', age: 24}));
+        this.$el.html(this.template(this.model.toJSON()));
     }
 });
 
