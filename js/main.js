@@ -71,7 +71,8 @@ var PersonalView = Backbone.View.extend({
     // className: 'person',
     // id: 'some-persone',
 
-    template: _.template('<strong><%= name %></strong>: <%= job %>, <%= age %> лет'),
+    // Внешний шаблон
+    template: _.template($('#personal-id').html()),
 
     /**
      * Наполнение документа HTML кодом
@@ -103,3 +104,5 @@ var ePersonView = new PersonalView({
 
 // Вызываем метод который запишет во внутрь вида имя модели
 ePersonView.render();
+
+$('body').append(ePersonView.el);
