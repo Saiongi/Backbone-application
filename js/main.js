@@ -52,21 +52,29 @@ var PersonalView = Backbone.View.extend({
     }
 });
 
-var person = new Person();
-var personView = new PersonalView({
-    model: person
-});
+// Такое приходит с сервера
+var people = [
+    {
+        name: 'Петр',
+        age: 27,
+        job: 'Менеджер',
+    },
+    {
+        name: 'Игорь',
+        age: 22,
+        job: 'Продавец',
+    },
+    {
+        name: 'Альберт',
+        job: 'Кассир',
+    },
+];
 
-var person2 = new Person({
-    name: 'Петр',
-    job: 'менеджер'
-});
-var personView2 = new PersonalView({
-    model: person2
-});
+// Заполняем коллекцию массивом объектов
+var peopleCollection = new PeopleCollection(people);
 
-var peopleCollection = new PeopleCollection();
-peopleCollection.add(person);
-peopleCollection.add(person2);
+// Возьмем Игоря
+var m = peopleCollection.at(1);
 
-$('body').append(peopleCollection.el);
+// Сделаем его студентом
+m.set('job','студент');
