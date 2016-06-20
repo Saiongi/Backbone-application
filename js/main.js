@@ -1,7 +1,32 @@
+// Пространство имен для приложения
+var Person = {
+    Collection : {},
+    Model : {},
+    View : {}
+};
+
+// Такое приходит с сервера
+var people = [
+    {
+        name: 'Петр',
+        age: 27,
+        job: 'Менеджер',
+    },
+    {
+        name: 'Игорь',
+        age: 22,
+        job: 'Продавец',
+    },
+    {
+        name: 'Альберт',
+        job: 'Кассир',
+    },
+];
+
 /**
  * Создание модели объекта
  */
-var Person = Backbone.Model.extend({
+Person.Model.Item = Backbone.Model.extend({
 
     // Значение инстанса по умолчанию
     defaults: {
@@ -26,19 +51,20 @@ var Person = Backbone.Model.extend({
 /**
  * Список людей
  */
-var PeopleCollection = Backbone.Collection.extend({
+Person.Collection.Items = Backbone.Collection.extend({
     // передаем инициализирующую модель с которой ассоциируются будущие модели
-    model: Person,
+    model: Person.Model.Item,
 });
 
 /**
  * Создаем вид одного человека
  */
-var PersonalView = Backbone.View.extend({
+Person.View.Item = Backbone.View.extend({
 
     // Срабатывает в момент создания экземпляра класса
     initialize: function() {
-
+        // бест-практис рендер при инициализации
+        this.render();
     },
     tagName: 'li',
 
@@ -55,7 +81,7 @@ var PersonalView = Backbone.View.extend({
 /**
  * Вид списка людей
  */
-var PeopleView = Backbone.View.extend({
+Person.View.Items = Backbone.View.extend({
     tagName: 'ul',
     className: 'people-list',
     initialize: function() {
@@ -63,7 +89,7 @@ var PeopleView = Backbone.View.extend({
     },
     render: function () {
         this.collection.each(function(person) {
-            var personView = new PersonalView({model: person});
+            var personView = new Person.View.Item ({model: person});
             this.$el.append(personView.el);
         }, this);
 
@@ -71,30 +97,13 @@ var PeopleView = Backbone.View.extend({
     }
 });
 
-// Такое приходит с сервера
-var people = [
-    {
-        name: 'Петр',
-        age: 27,
-        job: 'Менеджер',
-    },
-    {
-        name: 'Игорь',
-        age: 22,
-        job: 'Продавец',
-    },
-    {
-        name: 'Альберт',
-        job: 'Кассир',
-    },
-];
 
-var person = new Person;
+var person = new Person.Model.Item;
 
 // Заполняем коллекцию массивом объектов
-var peopleCollection = new PeopleCollection(people);
+var peopleCollection = new Person.Collection.Items(people);
 
 // Передаем коллекцию peopleCollection в вид списка людей PeopleView
-var peopleView = new PeopleView({collection: peopleCollection});
+var peopleView = new Person.View.Items({collection: peopleCollection});
 
 $(document.body).append(peopleView.render().el);
