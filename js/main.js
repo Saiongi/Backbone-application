@@ -63,13 +63,11 @@ var PeopleView = Backbone.View.extend({
     },
     render: function () {
         this.collection.each(function(person) {
-            var personView = new PersonalView(person.toJSON());
-            console.log(personView.el);
-        }, this);
-        /*this.collection.each(function(person) {
             var personView = new PersonalView({model: person});
             this.$el.append(personView.el);
-        }, this);*/
+        }, this);
+
+        return this;
     }
 });
 
@@ -96,13 +94,7 @@ var person = new Person;
 // Заполняем коллекцию массивом объектов
 var peopleCollection = new PeopleCollection(people);
 
-// Возьмем Игоря и сделаем его студентом
-var m = peopleCollection.at(1);
-m.set('job','студент');
-
 // Передаем коллекцию peopleCollection в вид списка людей PeopleView
-var peopleView = new PeopleView({
-    collection: peopleCollection
-});
+var peopleView = new PeopleView({collection: peopleCollection});
 
-peopleView.render();
+$(document.body).append(peopleView.render().el);
