@@ -63,7 +63,7 @@ Person.View.Item = Backbone.View.extend({
 
     // Срабатывает в момент создания экземпляра класса
     initialize: function() {
-        // бест-практис рендер при инициализации
+        // бест-практиз рендер на этапе инициализации
         this.render();
     },
     tagName: 'li',
@@ -89,14 +89,13 @@ Person.View.Items = Backbone.View.extend({
     },
     render: function () {
         this.collection.each(function(person) {
-            var personView = new Person.View.Item ({model: person});
+            var personView = new Person.View.Item({model: person});
             this.$el.append(personView.el);
         }, this);
 
         return this;
     }
 });
-
 
 var person = new Person.Model.Item;
 
