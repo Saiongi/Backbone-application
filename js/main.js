@@ -13,7 +13,7 @@ var Person = Backbone.Model.extend({
     // Валидация возраста
     validate: function(attrs) {
         if (attrs.age <= 0) {
-            return 'Ошибка при установке значения атрибута age: ожидается мнж. чисел R.';
+            return 'Ошибка при установке значения атрибута age: ожидается положительное число';
         }
     },
 
@@ -32,14 +32,13 @@ var PeopleCollection = Backbone.Collection.extend({
 });
 
 /**
- * Создаем вид
+ * Создаем вид одного человека
  */
 var PersonalView = Backbone.View.extend({
 
     // Срабатывает в момент создания экземпляра класса
     initialize: function() {
-        // Выведем модель данного вида
-        console.log(this.model);
+
     },
     tagName: 'li',
 
@@ -49,6 +48,28 @@ var PersonalView = Backbone.View.extend({
     // Наполнение документа HTML кодом
     render: function() {
         this.$el.html(this.template(this.model.toJSON()));
+        return this;
+    }
+});
+
+/**
+ * Вид списка людей
+ */
+var PeopleView = Backbone.View.extend({
+    tagName: 'ul',
+    className: 'people-list',
+    initialize: function() {
+
+    },
+    render: function () {
+        this.collection.each(function(person) {
+            var personView = new PersonalView(person.toJSON());
+            console.log(personView.el);
+        }, this);
+        /*this.collection.each(function(person) {
+            var personView = new PersonalView({model: person});
+            this.$el.append(personView.el);
+        }, this);*/
     }
 });
 
@@ -70,11 +91,18 @@ var people = [
     },
 ];
 
+var person = new Person;
+
 // Заполняем коллекцию массивом объектов
 var peopleCollection = new PeopleCollection(people);
 
-// Возьмем Игоря
+// Возьмем Игоря и сделаем его студентом
 var m = peopleCollection.at(1);
-
-// Сделаем его студентом
 m.set('job','студент');
+
+// Передаем коллекцию peopleCollection в вид списка людей PeopleView
+var peopleView = new PeopleView({
+    collection: peopleCollection
+});
+
+peopleView.render();
